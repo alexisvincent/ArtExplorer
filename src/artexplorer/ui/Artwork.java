@@ -2,7 +2,9 @@ package artexplorer.ui;
 
 import artexplorer.core.ArtExplorer;
 import artexplorer.expressions.Expression;
+import concurrency.ProcessingQueue;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
@@ -31,7 +33,7 @@ public class Artwork extends AComponent {
         this.expression1 = expression1;
         this.expression2 = expression2;
         this.expression3 = expression3;
-
+        
         this.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -54,12 +56,30 @@ public class Artwork extends AComponent {
                         ArtExplorer.setSaveImageMode(false);
                     }
                 } else {
-                    ArtRotator.getInstance().addArtDisplay(new ArtDisplay(
+                    ArtExplorer.getINSTANCE().getProcessingQueue().addJob(new ProcessingQueue.Job() {
+
+                        @Override
+                        public boolean doJob() {
+                            ArtRotator.getInstance().addArtDisplay(new ArtDisplay(
                             expression1,
                             expression2,
                             expression3,
                             ArtRotator.getInstance().getMaxDepth(),
                             ArtRotator.getInstance().getRandom()));
+                            return true;
+                        }
+
+                        @Override
+                        public boolean mustBeRemoved() {
+                            return true;
+                        }
+                    });
+//                    ArtRotator.getInstance().addArtDisplay(new ArtDisplay(
+//                            expression1,
+//                            expression2,
+//                            expression3,
+//                            ArtRotator.getInstance().getMaxDepth(),
+//                            ArtRotator.getInstance().getRandom()));
                 }
 
             }
