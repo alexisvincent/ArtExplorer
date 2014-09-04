@@ -21,6 +21,9 @@ import swing.toolkit.UIToolkit;
  * @author alexisvincent
  */
 public class ArtExplorer extends Application {
+    
+    private static boolean rgbMode = true;
+    private static boolean saveImageMode = false;
 
     static {
         INSTANCE = new ArtExplorer();
@@ -34,6 +37,22 @@ public class ArtExplorer extends Application {
         return INSTANCE;
     }
 
+    public static boolean isRgbMode() {
+        return rgbMode;
+    }
+
+    public static void setRgbMode(boolean rgbMode) {
+        ArtExplorer.rgbMode = rgbMode;
+    }
+
+    public static boolean isSaveImageMode() {
+        return saveImageMode;
+    }
+
+    public static void setSaveImageMode(boolean saveImageMode) {
+        ArtExplorer.saveImageMode = saveImageMode;
+    }
+    
     @Override
     protected void initGUI() {
         //Init Gui
@@ -68,11 +87,11 @@ public class ArtExplorer extends Application {
         }
 
         private void init() {
-            artRotator = new ArtRotator();
+            artRotator = ArtRotator.getInstance();
             forwardButton = new AButton(">");
             backwardButton = new AButton("<");
             saveImageButton = new AButton("Save Image");
-            switchArtTypeButton = new AButton("To Other");
+            switchArtTypeButton = new AButton("To HSV");
             
             forwardButton.setPreferredSize(new Dimension(0, 50));
             
@@ -89,6 +108,31 @@ public class ArtExplorer extends Application {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     artRotator.backwards();
+                }
+            });
+            
+            switchArtTypeButton.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    ArtExplorer.setRgbMode(!ArtExplorer.isRgbMode());
+                    
+                    if (ArtExplorer.isRgbMode()) {
+                        switchArtTypeButton.setName("To HSV");
+                    } else {
+                        switchArtTypeButton.setName("To RGB");
+                    }
+                    
+                    repaint();
+                }
+            });
+            
+            saveImageButton.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    ArtExplorer.setSaveImageMode(!ArtExplorer.isSaveImageMode());
+                    repaint();
                 }
             });
 

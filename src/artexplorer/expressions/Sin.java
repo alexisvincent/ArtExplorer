@@ -16,7 +16,7 @@ public class Sin extends Expression {
     
     @Override
     public double evaluate(double x, double y) {
-        return Math.sin(expression.evaluate(x, y));
+        return Math.sin(Math.PI * expression.evaluate(x, y));
     }
 
     @Override

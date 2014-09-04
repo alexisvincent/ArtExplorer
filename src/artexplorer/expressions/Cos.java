@@ -16,7 +16,7 @@ public class Cos extends Expression {
     
     @Override
     public double evaluate(double x, double y) {
-        return Math.cos(expression.evaluate(x, y));
+        return Math.cos(Math.PI * expression.evaluate(x, y));
     }
 
     @Override
